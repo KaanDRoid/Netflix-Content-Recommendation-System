@@ -55,6 +55,11 @@ def load_data():
     try:
         df = pd.read_csv('netflixData.csv')
         
+        # Fix column names
+        df.columns = df.columns.str.strip()
+        if 'Content\nType' in df.columns:
+            df = df.rename(columns={'Content\nType': 'Content Type'})
+        
         # Basic preprocessing
         df = df.dropna(subset=['Title', 'Content Type'])
         df['Genres'] = df['Genres'].fillna('Unknown')
@@ -222,15 +227,12 @@ def content_explorer_page(df):
         # Display content in cards
         for idx, row in filtered_df.head(20).iterrows():
             with st.container():
-                st.markdown(f"""
-                <div class="recommendation-card">
-                    <h4>{row['Title']}</h4>
-                    <p><strong>Type:</strong> {row['Content Type']} | <strong>Rating:</strong> {row['Rating']} | <strong>IMDB:</strong> {row['Imdb Score']}</p>
-                    <p><strong>Genres:</strong> {row['Genres']}</p>
-                    <p><strong>Cast:</strong> {str(row['Cast'])[:200]}...</p>
-                    <p>{str(row['Description'])[:200]}...</p>
-                </div>
-                """, unsafe_allow_html=True)
+                st.subheader(row['Title'])
+                st.write(f"**Type:** {row['Content Type']} | **Rating:** {row['Rating']} | **IMDB:** {row['Imdb Score']}")
+                st.write(f"**Genres:** {row['Genres']}")
+                st.write(f"**Cast:** {str(row['Cast'])[:200]}...")
+                st.write(str(row['Description'])[:200] + "...")
+                st.divider()
 
 def recommendations_page(df):
     """Recommendation generation page"""
@@ -327,19 +329,19 @@ def display_recommendations(recommendations):
             col1, col2 = st.columns([3, 1])
             
             with col1:
-                st.markdown(f"""
-                <div class="recommendation-card">
-                    <h4>{row['Title']}</h4>
-                    <p><strong>Type:</strong> {row['Content Type']} | <strong>Rating:</strong> {row['Rating']} | <strong>IMDB:</strong> {row['Imdb Score']}</p>
-                    <p><strong>Genres:</strong> {row['Genres']}</p>
-                    <p><strong>Cast:</strong> {str(row['Cast'])[:200]}...</p>
-                    <p>{str(row['Description'])[:250]}...</p>
-                </div>
-                """, unsafe_allow_html=True)
+                st.subheader(row['Title'])
+                st.write(f"**Type:** {row['Content Type']} | **Rating:** {row['Rating']} | **IMDB:** {row['Imdb Score']}")
+                st.write(f"**Genres:** {row['Genres']}")
+                st.write(f"**Cast:** {str(row['Cast'])[:200]}...")
+                st.write(str(row['Description'])[:250] + "...")
+                st.divider()
             
             with col2:
                 st.metric("IMDB Score", f"{row['Imdb_Numeric']:.1f}/10")
-                st.metric("Release Year", int(row['Release Date']) if pd.notna(row['Release Date']) else 'Unknown')
+                if pd.notna(row['Release Date']):
+                    st.metric("Release Year", int(row['Release Date']))
+                else:
+                    st.metric("Release Year", 'Unknown')
 
 def analytics_page(df):
     """Analytics and insights page"""
