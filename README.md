@@ -1,30 +1,24 @@
 # Netflix Content Recommendation System
 
-A comprehensive machine learning-based recommendation system for Netflix content using collaborative filtering, content-based filtering, and hybrid approaches. This project analyzes Netflix viewing patterns and provides personalized content recommendations.
+A machine learning-based recommendation system for Netflix content using collaborative filtering, content-based filtering, and hybrid approaches. This project analyzes Netflix content data and provides personalized recommendations through an interactive web interface.
 
 ## Project Overview
 
-This recommendation system leverages multiple machine learning techniques to suggest relevant Netflix content to users based on their viewing history, preferences, and content similarities. The system combines collaborative filtering with content-based approaches to deliver accurate and diverse recommendations.
+This recommendation system implements multiple machine learning algorithms to suggest relevant Netflix content based on user preferences, viewing history, and content similarities. The system combines collaborative filtering with content-based approaches to deliver accurate recommendations.
 
 ## Features
 
 ### Recommendation Algorithms
-- **Collaborative Filtering**: User-based and item-based collaborative filtering
-- **Content-Based Filtering**: Recommendations based on content features (genre, cast, director, etc.)
-- **Hybrid Approach**: Combines multiple algorithms for improved accuracy
-- **Matrix Factorization**: Advanced dimensionality reduction techniques
+- **Content-Based Filtering**: Recommendations based on content features (genre, cast, director, description)
+- **Collaborative Filtering**: User-based recommendations using similarity analysis
+- **TF-IDF Vectorization**: Text similarity analysis for content matching
+- **Cosine Similarity**: Advanced similarity calculations for precise recommendations
 
-### Analytics & Insights
-- **Content Analysis**: Distribution of genres, ratings, and production countries
-- **Trend Analysis**: Release patterns and popularity trends over time
-- **Performance Metrics**: Precision, recall, and recommendation accuracy
-- **Interactive Visualizations**: Comprehensive data exploration dashboard
-
-### Technical Features
-- **Scalable Architecture**: Efficient handling of large datasets
-- **Real-time Recommendations**: Fast recommendation generation
-- **Evaluation Framework**: Comprehensive model performance assessment
-- **Export Capabilities**: Save recommendations and analytics results
+### Interactive Web Interface
+- **Content Explorer**: Browse and filter Netflix catalog
+- **Personalized Recommendations**: Get tailored content suggestions
+- **Similar Content Finder**: Find content similar to titles you enjoy
+- **Analytics Dashboard**: Comprehensive data visualization and insights
 
 ## Technology Stack
 
