@@ -2,6 +2,22 @@
 
 A Streamlit app for browsing a Netflix catalog and getting title recommendations. It has two recommendation modes: a filter-and-rank mode (pick genres, content types and a minimum IMDb score, get the highest rated matches) and a "similar titles" mode that uses TF-IDF and cosine similarity on each title's genres, cast, director and description. There is also a small analytics page with charts of the catalog.
 
+## Screenshots
+
+Taken from the app running locally on the included `netflixData.csv`.
+
+Get Recommendations with the default filters (movies and TV shows, minimum IMDb score 6.0, top 10):
+
+![Get Recommendations page](docs/images/recommendations.png)
+
+Similar Content for "Stranger Things" (TF-IDF and cosine similarity):
+
+![Similar Content page](docs/images/similar-titles.png)
+
+Analytics Dashboard:
+
+![Analytics Dashboard page](docs/images/analytics-dashboard.png)
+
 ## Data
 
 `netflixData.csv` is a snapshot of the Netflix catalog with 5,967 titles (3,867 movies and 2,100 TV shows). Columns: Show Id, Title, Description, Director, Genres, Cast, Production Country, Release Date (year), Rating, Duration, Imdb Score (e.g. `6.6/10`), Content Type, Date Added. Release years go up to 2021, and 608 titles have no IMDb score.
@@ -44,6 +60,7 @@ The app opens at http://localhost:8501. Run it from the repo root, since the CSV
 streamlit_app.py   # the Streamlit app (data loading, recommendations, charts)
 netflixData.csv    # dataset
 requirements.txt
+docs/images/       # screenshots used in this README
 LICENSE            # MIT
 ```
 

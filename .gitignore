@@ -68,6 +68,7 @@ config_local.py
 *.jpg
 *.jpeg
 *.gif
+!docs/images/*.png
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
