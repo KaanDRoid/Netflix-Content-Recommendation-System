@@ -1,190 +1,53 @@
 # Netflix Content Recommendation System
 
-A machine learning-based recommendation system for Netflix content using collaborative filtering, content-based filtering, and hybrid approaches. This project analyzes Netflix content data and provides personalized recommendations through an interactive web interface.
+A Streamlit app for browsing a Netflix catalog and getting title recommendations. It has two recommendation modes: a filter-and-rank mode (pick genres, content types and a minimum IMDb score, get the highest rated matches) and a "similar titles" mode that uses TF-IDF and cosine similarity on each title's genres, cast, director and description. There is also a small analytics page with charts of the catalog.
 
-## Project Overview
+## Data
 
-This recommendation system implements multiple machine learning algorithms to suggest relevant Netflix content based on user preferences, viewing history, and content similarities. The system combines collaborative filtering with content-based approaches to deliver accurate recommendations.
+`netflixData.csv` is a snapshot of the Netflix catalog with 5,967 titles (3,867 movies and 2,100 TV shows). Columns: Show Id, Title, Description, Director, Genres, Cast, Production Country, Release Date (year), Rating, Duration, Imdb Score (e.g. `6.6/10`), Content Type, Date Added. Release years go up to 2021, and 608 titles have no IMDb score.
 
-## Features
+There is no user or viewing data in the dataset, so the app does not do collaborative filtering. Everything is based on title metadata.
 
-### Recommendation Algorithms
-- **Content-Based Filtering**: Recommendations based on content features (genre, cast, director, description)
-- **Collaborative Filtering**: User-based recommendations using similarity analysis
-- **TF-IDF Vectorization**: Text similarity analysis for content matching
-- **Cosine Similarity**: Advanced similarity calculations for precise recommendations
+## How it works
 
-### Interactive Web Interface
-- **Content Explorer**: Browse and filter Netflix catalog
-- **Personalized Recommendations**: Get tailored content suggestions
-- **Similar Content Finder**: Find content similar to titles you enjoy
-- **Analytics Dashboard**: Comprehensive data visualization and insights
+Preprocessing (`load_data` in `streamlit_app.py`):
+- missing genres, cast, director, country and rating are filled with placeholders
+- the IMDb score is parsed to a number; missing scores are filled with the median
+- rows without a valid release year are dropped, leaving 5,964 titles
 
-## Technology Stack
+Pages:
+- **Content Explorer**: filter by type, genre and minimum IMDb score.
+- **Get Recommendations**: filters by the selected genres and types, then returns the top N titles by IMDb score.
+- **Similar Content**: builds a TF-IDF matrix (1,000 features, unigrams and bigrams, English stop words removed) over genres + cast + director + description, then returns the 10 titles with the highest cosine similarity to the chosen title.
+- **Analytics Dashboard**: top genres, releases per year, movies vs TV shows, top production countries, IMDb score distribution and the top rated titles.
 
-- **Data Processing**: `pandas`, `numpy`, `scipy`
-- **Machine Learning**: `scikit-learn`, `surprise`, `tensorflow`
-- **Visualization**: `plotly`, `matplotlib`, `seaborn`
-- **Web Framework**: `streamlit`
-- **Text Processing**: `nltk`, `textblob`
+There is no offline evaluation of the recommendations, so no accuracy numbers are reported here.
 
-## Dataset
+## How to run
 
-The project uses Netflix content data with the following features:
-- Content metadata (title, description, genre, cast, director)
-- Release information (date, country, rating)
-- User ratings and viewing patterns
-- Content duration and type (movie/TV show)
+Requires Python 3.10+.
 
-**Data Source**: Netflix content dataset with 8,000+ titles
-
-## Installation & Setup
-
-### Prerequisites
-- Python 3.8 or higher
-- Git
-
-### Quick Start
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/KaanDRoid/netflix-recommendation-system.git
-   cd netflix-recommendation-system
-   ```
-
-2. **Set up virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Run the application**
-   ```bash
-   streamlit run app.py
-   ```
-
-5. **Open your browser** and navigate to `http://localhost:8501`
-
-## Usage
-
-### Recommendation Dashboard
-1. **Content Explorer**: Browse and filter Netflix content
-2. **Recommendation Engine**: Get personalized recommendations
-3. **Analytics Dashboard**: Explore content trends and patterns
-4. **Model Performance**: View recommendation accuracy metrics
-
-### Getting Recommendations
-- Select your preferred genres and content types
-- Rate content you've watched
-- Get instant personalized recommendations
-- Explore similar content and trending titles
-
-## Recommendation Algorithms
-
-### 1. Collaborative Filtering
-- **User-Based**: Find similar users and recommend their preferences
-- **Item-Based**: Recommend content similar to what users have liked
-- **Matrix Factorization**: SVD and NMF for dimensionality reduction
-
-### 2. Content-Based Filtering
-- **TF-IDF Vectorization**: Text similarity based on descriptions
-- **Feature Matching**: Genre, cast, director, and metadata similarity
-- **Cosine Similarity**: Calculate content similarity scores
-
-### 3. Hybrid Approach
-- **Weighted Combination**: Blend multiple algorithms
-- **Switching Hybrid**: Choose best algorithm based on data availability
-- **Meta-Learning**: Learn optimal combination weights
-
-## Model Performance
-
-### Evaluation Metrics
-- **Precision@K**: Accuracy of top-K recommendations
-- **Recall@K**: Coverage of relevant items in top-K
-- **NDCG**: Normalized Discounted Cumulative Gain
-- **Coverage**: Diversity of recommended content
-
-### Performance Results
-- Content-Based Filtering: 78% accuracy
-- Collaborative Filtering: 82% accuracy
-- Hybrid Model: 85% accuracy
-- Average recommendation time: <100ms
-
-## Project Structure
-
-```
-netflix-recommendation-system/
-├── app.py                          # Main Streamlit application
-├── recommendation_engine.py        # Core recommendation algorithms
-├── data_processor.py              # Data preprocessing and analysis
-├── evaluator.py                   # Model evaluation and metrics
-├── utils/
-│   ├── similarity_calculator.py   # Similarity computation functions
-│   ├── matrix_factorization.py    # Advanced ML algorithms
-│   └── visualization.py           # Chart and plot functions
-├── data/
-│   ├── netflixData.csv            # Netflix content dataset
-│   └── processed/                 # Processed data files
-├── models/                        # Trained model files
-├── requirements.txt               # Python dependencies
-├── README.md                      # Project documentation
-└── LICENSE                        # MIT License
+```bash
+git clone https://github.com/KaanDRoid/Netflix-Content-Recommendation-System.git
+cd Netflix-Content-Recommendation-System
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+streamlit run streamlit_app.py
 ```
 
-## Key Features Implementation
+The app opens at http://localhost:8501. Run it from the repo root, since the CSV is loaded with a relative path.
 
-### Advanced Algorithms
-- **SVD (Singular Value Decomposition)**: Matrix factorization for collaborative filtering
-- **NMF (Non-negative Matrix Factorization)**: Feature extraction and recommendation
-- **K-Means Clustering**: User and content segmentation
-- **Natural Language Processing**: Content description analysis
+## Repo layout
 
-### Performance Optimization
-- **Sparse Matrix Operations**: Efficient memory usage
-- **Caching**: Fast repeated recommendations
-- **Vectorized Operations**: Optimized similarity calculations
-- **Parallel Processing**: Multi-threaded recommendation generation
+```
+streamlit_app.py   # the Streamlit app (data loading, recommendations, charts)
+netflixData.csv    # dataset
+requirements.txt
+LICENSE            # MIT
+```
 
-## Future Enhancements
+## Possible next steps
 
-- Deep learning models (Neural Collaborative Filtering)
-- Real-time user feedback integration
-- A/B testing framework for algorithm comparison
-- Multi-criteria recommendation (mood, time, device)
-- Social recommendation features
-- Cold start problem solutions
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-### Development Guidelines
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Netflix for providing comprehensive content data
-- Scikit-learn community for machine learning tools
-- Streamlit for the excellent web framework
-- Open source recommendation system research community
-
-## Contact
-
-For questions or suggestions, feel free to reach out or open an issue.
-
----
-
-**If you find this project helpful, please consider giving it a star!**
+- add real user ratings so a collaborative filtering model can be trained and evaluated
+- add a simple offline check for the similarity results (e.g. genre overlap of the top 10)
