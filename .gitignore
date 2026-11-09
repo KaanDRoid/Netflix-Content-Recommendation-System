@@ -48,7 +48,7 @@ venv.bak/
 .coverage
 htmlcov/
 
-# OS generated files
+# OS files
 .DS_Store
 .DS_Store?
 ._*
